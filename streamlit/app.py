@@ -51,11 +51,12 @@ df_selection = df.query(
 
 fig_evasao = px.bar(df_selection,
     x='evasão',
-    y='ano'
+    y='ano',
+    color='turno',
+    barmode='group'
 )
 
 st.plotly_chart(fig_evasao)
-
 #---------plotagem-------------
 
 #st.dataframe(df_selection)
