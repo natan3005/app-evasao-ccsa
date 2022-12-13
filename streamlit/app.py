@@ -5,22 +5,22 @@ import numpy as np
 
 
 # Customizar a aba da janela do APP
-st.set_page_config(page_icon='📊', page_title='2compare')
+st.set_page_config(page_icon=r'\projetos\ProjetoFinal\streamlit\barchart.png',page_title='2compare')
 
 #---------- Cabeçalho do App------------------
-a,b = st.columns([1,10])
+a,b = st.columns([2,14])
 
 with a:
-    st.image('\projetos\ProjetoFinal\streamlit\logo.png')
+    st.image(r'\projetos\ProjetoFinal\streamlit\barchart.png')
 with b:
-    st.title('Comparando a Evasão no CCSA')
+    st.title('2compare - Analisando cursos')
 #---------- Cabeçalho do App------------------
 
-
-st.markdown('''
-     Este App visa comparar a evasão dos cursos oferecidos pelo 
-     Centro de Ciências Sociais Aplicadas na Universidade Federal da Paraíba.
-''')
+with st.expander('_Do que se trata esse app?_', True):
+    st.markdown('''
+        Este aplicativo visa comparar a evasão entre os turnos diurno (matutino e vespertino) e norturno dos cursos oferecidos pelo 
+        Centro de Ciências Sociais Aplicadas da Universidade Federal da Paraíba.
+    ''')
 
 
 #---------sidebar-------------
@@ -43,12 +43,13 @@ turno = st.sidebar.multiselect(
 )
 #---------sidebar-------------
 
+
 df_selection = df.query(
     'NO_CINE_ROTULO == @curso & turno == @turno'
 )
 
-#df_dia = df_selection[['evasão','turno']]
-#dk = df_selection.loc[df_selection['turno']=='diurno']
+#----------média evasão----------
+media = df_selection['evasão'].mean()
 
 df_dia = df_selection.loc[df_selection['turno']=='diurno']
 media_dia = df_dia['evasão'].mean()
@@ -57,26 +58,37 @@ df_noite = df_selection.loc[df_selection['turno']=='noturno']
 media_noite = df_noite['evasão'].mean()
 
 diferenca = np.round(media_noite - media_dia)
+#----------média evasão----------
+
+estudantes = df_selection['ingressantes'].sum()
+#leftovers = estudantes*(media/100)
+def leftovers():
+    if media_noite > media_dia:
+        return int((((media_noite-media_dia)*estudantes)/100)/5)
+    elif media_dia > media_noite:
+        return int(((media_dia-media_noite)*estudantes)/100)
+    else:
+        return np.nan
 
 col1, col2, col3 = st.columns(3)
 #---------plotagem-------------
 with col1:
     st.metric(
-        label='Evasão Média: ',
-        value=np.round(df_selection['evasão'].mean())
+        label='Evasão Média (%): ',
+        value=np.round(media)
     )
 
 with col2:
     st.metric(
-        label='Diferença Evasão: ',
+        label='Diferença entre turnos (%): ',
         value=diferenca
     )
 
-##with col3:
-    #st.metric(
-    #    label='Não concluiram a graduação: ',
-    #    value=np.round(df_selection['evasão'].sum())
-    #)
+with col3:
+    st.metric(
+        label='Diferença de desistentes (ano): ',
+        value=np.round(leftovers())
+    )
 
 
 fig_evasao = px.bar(df_selection,
