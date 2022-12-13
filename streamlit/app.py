@@ -70,7 +70,15 @@ def leftovers():
     else:
         return np.nan
 
-col1, col2, col3 = st.columns(3)
+def horario():
+    if diferenca > 0:
+        return 'Noturno'
+    elif diferenca < 0:
+        return 'Diurno'
+    else:
+        return 'Indiferente'
+
+col1, col2, col3, col4 = st.columns(4)
 #---------plotagem-------------
 with col1:
     st.metric(
@@ -80,14 +88,19 @@ with col1:
 
 with col2:
     st.metric(
-        label='Diferença entre turnos (%): ',
+        label='Diferença entre Turnos (%): ',
         value=diferenca
     )
 
 with col3:
     st.metric(
-        label='Diferença de desistentes (ano): ',
+        label='Diferença de Alunos: ',
         value=np.round(leftovers())
+    )
+with col4:
+    st.metric(
+        label='Menor Eficiência',
+        value=horario()
     )
 
 
