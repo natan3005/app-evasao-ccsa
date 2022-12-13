@@ -5,13 +5,13 @@ import numpy as np
 
 
 # Customizar a aba da janela do APP
-st.set_page_config(page_icon=r'\projetos\ProjetoFinal\streamlit\barchart.png',page_title='2compare')
+st.set_page_config(page_icon='streamlit/barchart.png',page_title='2compare')
 
 #---------- Cabeçalho do App------------------
 a,b = st.columns([2,14])
 
 with a:
-    st.image(r'\projetos\ProjetoFinal\streamlit\barchart.png')
+    st.image('streamlit/barchart.png')
 with b:
     st.title('2compare - Analisando cursos')
 #---------- Cabeçalho do App------------------
@@ -24,7 +24,7 @@ with st.expander('_Do que se trata esse app?_', True):
 
 
 #---------sidebar-------------
-df = pd.read_excel(r'\projetos\ProjetoFinal\tables\ccsa.xlsx',
+df = pd.read_excel('tables/ccsa.xlsx',
     parse_dates=[2]
 )
 
