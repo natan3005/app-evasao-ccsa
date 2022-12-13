@@ -11,7 +11,7 @@ st.set_page_config(page_icon='📊', page_title='2compare')
 a,b = st.columns([1,10])
 
 with a:
-    st.image('\projetos\ProjetoFinal\streamlit\logo.png.png')
+    st.image('\projetos\ProjetoFinal\streamlit\logo.png')
 with b:
     st.title('Comparando a Evasão no CCSA')
 #---------- Cabeçalho do App------------------
@@ -47,7 +47,37 @@ df_selection = df.query(
     'NO_CINE_ROTULO == @curso & turno == @turno'
 )
 
+#df_dia = df_selection[['evasão','turno']]
+#dk = df_selection.loc[df_selection['turno']=='diurno']
+
+df_dia = df_selection.loc[df_selection['turno']=='diurno']
+media_dia = df_dia['evasão'].mean()
+
+df_noite = df_selection.loc[df_selection['turno']=='noturno']
+media_noite = df_noite['evasão'].mean()
+
+diferenca = np.round(media_noite - media_dia)
+
+col1, col2, col3 = st.columns(3)
 #---------plotagem-------------
+with col1:
+    st.metric(
+        label='Evasão Média: ',
+        value=np.round(df_selection['evasão'].mean())
+    )
+
+with col2:
+    st.metric(
+        label='Diferença Evasão: ',
+        value=diferenca
+    )
+
+##with col3:
+    #st.metric(
+    #    label='Não concluiram a graduação: ',
+    #    value=np.round(df_selection['evasão'].sum())
+    #)
+
 
 fig_evasao = px.bar(df_selection,
     x='evasão',
@@ -58,11 +88,3 @@ fig_evasao = px.bar(df_selection,
 
 st.plotly_chart(fig_evasao)
 #---------plotagem-------------
-
-#st.dataframe(df_selection)
-
-#curso = st.selectbox('Selecione o curso que deseja analisar:',options=['Administração','Arquivologia','Biblioteconomia','Ciências atuariais','Contabilidade','Economia','Gestão pública','Relações internacionais',''])
-#if curso:
-#    df = pd.read_excel(r'\projetos\ProjetoFinal\ccsa.xlsx')
-#    df = df.loc[df['NO_CINE_ROTULO']==curso]
-#    st.dataframe(df)
