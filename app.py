@@ -13,7 +13,7 @@ a,b = st.columns([2,14])
 with a:
     st.image('streamlit/barchart.png')
 with b:
-    st.title('2compare - Analisando cursos')
+    st.title('2compare - Explore a Evasão')
 #---------- Cabeçalho do App------------------
 
 with st.expander('_Do que se trata esse app?_', True):
@@ -89,7 +89,7 @@ with col1:
 with col2:
     st.metric(
         label='Diferença entre Turnos (%): ',
-        value=diferenca
+        value=np.abs(diferenca)
     )
 
 with col3:
